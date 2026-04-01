@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Английский для детей - Игры</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Comic Sans MS', cursive;
+            background: linear-gradient(145deg, #b8e1fc, #9bc4e0);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff9ef;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #ffcf4a;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .speech {
+            background: white;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d46b00;
+        }
+        
+        .progress-bar {
+            background: #ffe2a4;
+            border-radius: 30px;
+            height: 20px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #4caf50;
+            width: 0%;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .menu {
+            display: flex;
+            gap: 10px;
+            background: #ffefcf;
+            padding: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .menu-btn {
+            background: #fff3e0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        
+        .menu-btn:active {
+            transform: translateY(2px);
+        }
+        
+        .screens-container {
+            padding: 20px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #cc7b2e;
+            margin-top: 0;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #ddb582;
+            transition: 0.05s linear;
+        }
+        
+        .card:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #ddb582;
+        }
+        
+        .card-emoji {
+            font-size: 3rem;
+        }
+        
+        .card-word {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff8c42;
+        }
+        
+        .games-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .game-card {
+            background: #ffe3b5;
+            border-radius: 30px;
+            padding: 20px;
+            text-align: center;
+            width: 150px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #c29a6b;
+        }
+        
+        .game-card:active {
+            transform: translateY(4px);
+        }
+        
+        .game-emoji {
+            font-size: 3rem;
+        }
+        
+        /* Стили для игр */
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .game-content {
+            background: #fff9ef;
+            border-radius: 40px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .game-question {
+            font-size: 3rem;
+            margin: 20px 0;
+        }
+        
+        .game-options {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .game-option {
+            background: #ffbc6e;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        
+        .game-option:hover {
+            background: #ffa64a;
+        }
+        
+        .letter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .letter-btn {
+            background: #ffbc6e;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .word-display {
+            font-size: 2rem;
+            letter-spacing: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .close-game {
+            background: #ffaa66;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: #ffefdb;
+            border-radius: 30px;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #e67e22;
+        }
+        
+        .reset-btn {
+            background: #ffaa66;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+        
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .memory-card {
+            background: #ffbc6e;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 2.5rem;
+            box-shadow: 0 6px 0 #b4622a;
+        }
+        
+        .memory-card:active {
+            transform: translateY(2px);
+        }
+        
+        .memory-card.matched {
+            background: #b5e3a1;
+            cursor: default;
+        }
+        
+        .game-btn {
+            background: #ffbc6e;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            .memory-board {
+                gap: 8px;
+            }
+            .memory-card {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <div class="speech">👋 Привет! Давай учить английский!</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div id="progressText" style="text-align: right; font-size: 0.9rem;">0% выполнено</div>
+    </div>
+    
+    <div class="menu">
+        <button class="menu-btn" onclick="showScreen('main')">📚 Учим слова</button>
+        <button class="menu-btn" onclick="showScreen('games')">🎮 Игры</button>
+        <button class="menu-btn" onclick="showScreen('progress')">📊 Прогресс</button>
+        <button class="menu-btn" onclick="showScreen('memory')">🐾 Найди пару</button>
+    </div>
+    
+    <div class="screens-container">
+        <!-- Главный экран -->
+        <div class="screen active" id="mainScreen">
+            <h2>📚 Животные</h2>
+            <div class="cards-grid" id="wordsGrid"></div>
+        </div>
+        
+        <!-- Игры -->
+        <div class="screen" id="gamesScreen">
+            <h2>🎮 Выбери игру</h2>
+            <div class="games-grid">
+                <div class="game-card" onclick="openGame('guess')">
+                    <div class="game-emoji">❓</div>
+                    <div class="game-title">Угадай слово</div>
+                    <div id="guessScore">★ 0/4</div>
+                </div>
+                <div class="game-card" onclick="openGame('build')">
+                    <div class="game-emoji">🔤</div>
+                    <div class="game-title">Собери слово</div>
+                    <div id="buildScore">★ 0/4</div>
+                </div>
+                <div class="game-card" onclick="openGame('repeat')">
+                    <div class="game-emoji">🎤</div>
+                    <div class="game-title">Повтори слово</div>
+                    <div id="repeatScore">★ 0/4</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Прогресс -->
+        <div class="screen" id="progressScreen">
+            <h2>📊 Мой прогресс</h2>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div>🎯 Выучено слов</div>
+                    <div class="stat-value" id="wordsLearned">9</div>
+                </div>
+                <div class="stat-item">
+                    <div>⭐ Пройдено игр</div>
+                    <div class="stat-value" id="gamesCompleted">0/3</div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetProgress()">🔄 Сбросить прогресс</button>
+        </div>
+        
+        <!-- Игра Найди пару -->
+        <div class="screen" id="memoryScreen">
+            <h2>🐾 Найди пару</h2>
+            <div id="memoryScore" style="font-size: 1.2rem; margin-bottom: 10px;">★ Найдено пар: 0/8</div>
+            <div class="memory-board" id="memoryBoard"></div>
+            <button class="game-btn" onclick="startMemoryGame()">🔄 Новая игра</button>
+            <button class="game-btn" onclick="showScreen('main')">🏠 Главное меню</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Слова для изучения
+    const animals = [
+        { id: "cat", emoji: "🐱", word: "CAT", translate: "Кот", russian: "кот" },
+        { id: "dog", emoji: "🐶", word: "DOG", translate: "Собака", russian: "собака" },
+        { id: "cow", emoji: "🐮", word: "COW", translate: "Корова", russian: "корова" },
+        { id: "pig", emoji: "🐷", word: "PIG", translate: "Свинья", russian: "свинья" },
+        { id: "duck", emoji: "🦆", word: "DUCK", translate: "Утка", russian: "утка" },
+        { id: "frog", emoji: "🐸", word: "FROG", translate: "Лягушка", russian: "лягушка" },
+        { id: "bee", emoji: "🐝", word: "BEE", translate: "Пчела", russian: "пчела" },
+        { id: "lion", emoji: "🦁", word: "LION", translate: "Лев", russian: "лев" },
+        { id: "monkey", emoji: "🐒", word: "MONKEY", translate: "Обезьяна", russian: "обезьяна" }
+    ];
+    
+    // Прогресс
+    let gameProgress = {
+        guess: 0,
+        build: 0,
+        repeat: 0
+    };
+    
+    // Загрузка сохраненного прогресса
+    function loadProgress() {
+        const saved = localStorage.getItem("englishProgress");
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                gameProgress = data.gameProgress || { guess: 0, build: 0, repeat: 0 };
+            } catch(e) {}
+        }
+        updateScores();
+        updateOverallProgress();
+    }
+    
+    // Сохранение прогресса
+    function saveProgress() {
+        localStorage.setItem("englishProgress", JSON.stringify({
+            gameProgress: gameProgress
+        }));
+        updateScores();
+        updateOverallProgress();
+    }
+    
+    // Обновление очков на экране
+    function updateScores() {
+        const guessEl = document.getElementById("guessScore");
+        const buildEl = document.getElementById("buildScore");
+        const repeatEl = document.getElementById("repeatScore");
+        if (guessEl) guessEl.innerHTML = `★ ${gameProgress.guess}/4`;
+        if (buildEl) buildEl.innerHTML = `★ ${gameProgress.build}/4`;
+        if (repeatEl) repeatEl.innerHTML = `★ ${gameProgress.repeat}/4`;
+    }
+    
+    // Общий прогресс
+    function updateOverallProgress() {
+        let completedGames = 0;
+        if (gameProgress.guess === 4) completedGames++;
+        if (gameProgress.build === 4) completedGames++;
+        if (gameProgress.repeat === 4) completedGames++;
+        
+        const gamesCompletedEl = document.getElementById("gamesCompleted");
+        if (gamesCompletedEl) gamesCompletedEl.innerHTML = `${completedGames}/3`;
+        
+        let total = 9 + completedGames;
+        let percent = Math.floor((total / 12) * 100);
+        const progressFill = document.getElementById("progressFill");
+        const progressText = document.getElementById("progressText");
+        if (progressFill) progressFill.style.width = percent + "%";
+        if (progressText) progressText.innerHTML = percent + "% выполнено";
+    }
+    
+    // Озвучка слова
+    function speakWord(word) {
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.7;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+    }
+    
+    // Рендер карточек слов
+    function renderWords() {
+        const grid = document.getElementById("wordsGrid");
+        if (!grid) return;
+        grid.innerHTML = "";
+        animals.forEach(animal => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.onclick = () => speakWord(animal.word);
+            card.innerHTML = `
+                <div class="card-emoji">${animal.emoji}</div>
+                <div class="card-word">${animal.word}</div>
+                <div>${animal.translate}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+    
+    // ============ ИГРА 1: УГАДАЙ СЛОВО ============
+    let currentGuessQuestion = 0;
+    let guessQuestions = [];
+    
+    function openGame(gameType) {
+        if (gameType === 'guess') {
+            startGuessGame();
+        } else if (gameType === 'build') {
+            startBuildGame();
+        } else if (gameType === 'repeat') {
+            startRepeatGame();
+        }
+    }
+    
+    function startGuessGame() {
+        // Создаем вопросы
+        guessQuestions = [...animals];
+        shuffleArray(guessQuestions);
+        currentGuessQuestion = 0;
+        showGuessQuestion();
+    }
+    
+    function showGuessQuestion() {
+        if (currentGuessQuestion >= guessQuestions.length) {
+            // Игра закончена
+            alert("🎉 Поздравляю! Ты прошел игру 'Угадай слово'!");
+            gameProgress.guess = Math.min(4, gameProgress.guess + 1);
+            saveProgress();
+            closeGameModal();
+            return;
+        }
+        
+        const animal = guessQuestions[currentGuessQuestion];
+        const options = getRandomOptions(animal);
+        
+        const modal = document.createElement('div');
+        modal.className = 'game-modal';
+        modal.id = 'gameModal';
+        modal.innerHTML = `
+            <div class="game-content">
+                <h3>❓ Угадай слово</h3>
+                <div class="game-question">${animal.emoji} ${animal.translate}?</div>
+                <div class="game-options" id="guessOptions"></div>
+                <div>Вопрос ${currentGuessQuestion + 1} из ${guessQuestions.length}</div>
+                <button class="close-game" onclick="closeGameModal()">Закрыть</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        const optionsContainer = document.getElementById('guessOptions');
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'game-option';
+            btn.textContent = opt;
+            btn.onclick = () => checkGuessAnswer(opt, animal.word);
+            optionsContainer.appendChild(btn);
+        });
+    }
+    
+    function getRandomOptions(correctAnimal) {
+        let options = [correctAnimal.word];
+        const others = animals.filter(a => a.id !== correctAnimal.id);
+        shuffleArray(others);
+        for (let i = 0; i < 2 && i < others.length; i++) {
+            options.push(others[i].word);
+        }
+        shuffleArray(options);
+        return options;
+    }
+    
+    function checkGuessAnswer(selected, correct) {
+        if (selected === correct) {
+            speakWord(correct);
+            alert("✅ Правильно! +1 очко!");
+            currentGuessQuestion++;
+            closeGameModal();
+            showGuessQuestion();
+        } else {
+            alert("❌ Неправильно! Попробуй еще раз!");
+        }
+    }
+    
+    // ============ ИГРА 2: СОБЕРИ СЛОВО ============
+    let currentBuildAnimal = null;
+    let currentBuildWord = "";
+    let selectedLetters = [];
+    let availableLetters = [];
+    
+    function startBuildGame() {
+        const randomIndex = Math.floor(Math.random() * animals.length);
+        currentBuildAnimal = animals[randomIndex];
+        currentBuildWord = currentBuildAnimal.word;
+        selectedLetters = [];
+        availableLetters = currentBuildWord.split('');
+        shuffleArray(availableLetters);
+        showBuildGame();
+    }
+    
+    function showBuildGame() {
+        const modal = document.createElement('div');
+        modal.className = 'game-modal';
+        modal.id = 'gameModal';
+        modal.innerHTML = `
+            <div class="game-content">
+                <h3>🔤 Собери слово</h3>
+                <div class="game-question">${currentBuildAnimal.emoji} ${currentBuildAnimal.translate}</div>
+                <div class="word-display" id="wordDisplay">${'_ '.repeat(currentBuildWord.length)}</div>
+                <div class="letter-buttons" id="letterButtons"></div>
+                <button class="close-game" onclick="checkBuildWord()">✅ Проверить</button>
+                <button class="close-game" onclick="closeGameModal()">Закрыть</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        renderBuildLetters();
+    }
+    
+    function renderBuildLetters() {
+        const container = document.getElementById('letterButtons');
+        if (!container) return;
+        container.innerHTML = '';
+        availableLetters.forEach((letter, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'letter-btn';
+            btn.textContent = letter;
+            btn.onclick = () => selectBuildLetter(idx);
+            container.appendChild(btn);
+        });
+        
+        const display = document.getElementById('wordDisplay');
+        let displayText = '';
+        for (let i = 0; i < currentBuildWord.length; i++) {
+            if (selectedLetters[i]) {
+                displayText += selectedLetters[i] + ' ';
+            } else {
+                displayText += '_ ';
+            }
+        }
+        display.textContent = displayText;
+    }
+    
+    function selectBuildLetter(index) {
+        const letter = availableLetters[index];
+        availableLetters.splice(index, 1);
+        
+        // Находим первую пустую позицию
+        for (let i = 0; i < currentBuildWord.length; i++) {
+            if (!selectedLetters[i]) {
+                selectedLetters[i] = letter;
+                break;
+            }
+        }
+        renderBuildLetters();
+    }
+    
+    function checkBuildWord() {
+        const builtWord = selectedLetters.join('');
+        if (builtWord === currentBuildWord) {
+            speakWord(currentBuildWord);
+            alert("🎉 Отлично! Ты собрал слово правильно!");
+            gameProgress.build = Math.min(4, gameProgress.build + 1);
+            saveProgress();
+            closeGameModal();
+        } else {
+            alert("❌ Неправильно! Попробуй еще раз или начни новую игру!");
+            closeGameModal();
+        }
+    }
+    
+    // ============ ИГРА 3: ПОВТОРИ СЛОВО ============
+    function startRepeatGame() {
+        const randomIndex = Math.floor(Math.random() * animals.length);
+        const animal = animals[randomIndex];
+        
+        const modal = document.createElement('div');
+        modal.className = 'game-modal';
+        modal.id = 'gameModal';
+        modal.innerHTML = `
+            <div class="game-content">
+                <h3>🎤 Повтори слово</h3>
+                <div class="game-question">${animal.emoji} Как будет ${animal.translate} по-английски?</div>
+                <button class="game-option" onclick="playRepeatWord('${animal.word}')">🔊 Прослушать</button>
+                <button class="game-option" onclick="checkRepeatWord('${animal.word}')">✅ Я повторил(а)</button>
+                <button class="close-game" onclick="closeGameModal()">Закрыть</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    function playRepeatWord(word) {
+        speakWord(word);
+    }
+    
+    function checkRepeatWord(word) {
+        alert(`🎉 Молодец! Слово "${word}" выучено!`);
+        gameProgress.repeat = Math.min(4, gameProgress.repeat + 1);
+        saveProgress();
+        closeGameModal();
+    }
+    
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+    
+    function closeGameModal() {
+        const modal = document.getElementById('gameModal');
+        if (modal) modal.remove();
+    }
+    
+    // ============ ИГРА "НАЙДИ ПАРУ" ============
+    let memoryCards = [];
+    let flippedCards = [];
+    let locked = false;
+    let matchedPairs = 0;
+    
+    function startMemoryGame() {
+        let selected = animals.slice(0, 8);
+        let deck = [];
+        selected.forEach(animal => {
+            deck.push({ ...animal, matched: false, uniqueId: Math.random() });
+            deck.push({ ...animal, matched: false, uniqueId: Math.random() });
+        });
+        
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        
+        memoryCards = deck;
+        flippedCards = [];
+        locked = false;
+        matchedPairs = 0;
+        renderMemoryBoard();
+        const scoreEl = document.getElementById("memoryScore");
+        if (scoreEl) scoreEl.innerHTML = `★ Найдено пар: 0/8`;
+    }
+    
+    function renderMemoryBoard() {
+        const board = document.getElementById("memoryBoard");
+        if (!board) return;
+        board.innerHTML = "";
+        
+        memoryCards.forEach((card, index) => {
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "memory-card";
+            if (card.matched) {
+                cardDiv.classList.add("matched");
+                cardDiv.innerHTML = card.emoji;
+            } else if (flippedCards.includes(index)) {
+                cardDiv.innerHTML = card.emoji;
+            } else {
+                cardDiv.innerHTML = "❓";
+            }
+            cardDiv.onclick = () => onMemoryCardClick(index);
+            board.appendChild(cardDiv);
+        });
+    }
+    
+    function onMemoryCardClick(index) {
+        if (locked) return;
+        if (memoryCards[index].matched) return;
+        if (flippedCards.includes(index)) return;
+        
+        flippedCards.push(index);
+        renderMemoryBoard();
+        
+        if (flippedCards.length === 2) {
+            locked = true;
+            const idx1 = flippedCards[0];
+            const idx2 = flippedCards[1];
+            const card1 = memoryCards[idx1];
+            const card2 = memoryCards[idx2];
+            
+            if (card1.word === card2.word) {
+                card1.matched = true;
+                card2.matched = true;
+                matchedPairs++;
+                const scoreEl = document.getElementById("memoryScore");
+                if (scoreEl) scoreEl.innerHTML = `★ Найдено пар: ${matchedPairs}/8`;
+                speakWord(card1.word);
+                flippedCards = [];
+                locked = false;
+                renderMemoryBoard();
+                
+                if (matchedPairs === 8) {
+                    setTimeout(() => {
+                        alert("🎉 Поздравляю! Ты нашел все пары! 🎉");
+                        if (gameProgress.guess < 4) {
+                            gameProgress.guess = Math.min(4, gameProgress.guess + 1);
+                            saveProgress();
+                            alert("✨ Ты получил +1 звезду в игре 'Угадай слово'!");
+                        }
+                    }, 100);
+                }
+            } else {
+                setTimeout(() => {
+                    flippedCards = [];
+                    locked = false;
+                    renderMemoryBoard();
+                }, 700);
+            }
+        }
+    }
+    
+    // Сброс прогресса
+    function resetProgress() {
+        if (confirm("Точно сбросить весь прогресс?")) {
+            gameProgress = { guess: 0, build: 0, repeat: 0 };
+            saveProgress();
+            alert("Прогресс сброшен!");
+        }
+    }
+    
+    // Переключение экранов
+    function showScreen(screenName) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        
+        if (screenName === 'main') {
+            document.getElementById('mainScreen').classList.add('active');
+        } else if (screenName === 'games') {
+            document.getElementById('gamesScreen').classList.add('active');
+        } else if (screenName === 'progress') {
+            document.getElementById('progressScreen').classList.add('active');
+            updateOverallProgress();
+        } else if (screenName === 'memory') {
+            document.getElementById('memoryScreen').classList.add('active');
+            if (memoryCards.length === 0) {
+                startMemoryGame();
+            }
+        }
+    }
+    
+    // Запуск
+    renderWords();
+    loadProgress();
+    startMemoryGame();
+    showScreen('main');
+    
+    // Делаем функции глобальными
+    window.showScreen = showScreen;
+    window.openGame = openGame;
+    window.resetProgress = resetProgress;
+    window.startMemoryGame = startMemoryGame;
+    window.closeGameModal = closeGameModal;
+    window.playRepeatWord = playRepeatWord;
+    window.checkRepeatWord = checkRepeatWord;
+    window.checkGuessAnswer = checkGuessAnswer;
+    window.checkBuildWord = checkBuildWord;
+    window.selectBuildLetter = selectBuildLetter;
+</script>
+</body>
+</html>
